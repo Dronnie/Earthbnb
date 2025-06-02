@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinimalStay | Encontre acomodações únicas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variáveis e Reset */
+        :root {
+            --primary: #FF385C;
+            --secondary: #008489;
+            --dark: #222222;
+            --light: #FFFFFF;
+            --gray: #717171;
+            --light-gray: #F7F7F7;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+            z-index: 100;
+            padding: 16px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            transform: rotate(-15deg);
+            transition: var(--transition);
+        }
+
+        .logo:hover i {
+            transform: rotate(0deg);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+
+        .btn-primary:hover {
+            background-color: #e0003d;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--gray);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 5%;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?ixlib=rb-4.0.3') center/cover;
+            color: var(--light);
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        /* Search Form */
+        .search-container {
+            background-color: var(--light);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow-hover);
+            width: 90%;
+            max-width: 1000px;
+            margin: -80px auto 80px;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .form-group input, .form-group select {
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 56, 92, 0.2);
+        }
+
+        .search-btn {
+            grid-column: span 1;
+            align-self: flex-end;
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 5%;
+            background-color: var(--light-gray);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Properties */
+        .properties {
+            padding: 100px 5%;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .property-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            background-color: var(--light);
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .property-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .property-price {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .property-info {
+            padding: 20px;
+        }
+
+        .property-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .property-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .property-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--primary);
+        }
+
+        /* Host Section */
+        .host-section {
+            padding: 100px 5%;
+            background: linear-gradient(to right, var(--primary), #ff6b81);
+            color: var(--light);
+            text-align: center;
+        }
+
+        .host-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .host-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .host-content p {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 5% 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            color: #bbb;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--light);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--light);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalFadeIn 0.5s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+        }
+
+        .modal-header {
+            padding: 30px 30px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .tab:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .tab.active {
+            background-color: var(--light);
+            border-bottom: 2px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            nav {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .auth-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            <i class="fas fa-home"></i>
+            <span>MinimalStay</span>
+        </a>
+        
+        <nav>
+            <ul>
+                <li><a href="#search">Buscar</a></li>
+                <li><a href="#features">Como funciona</a></li>
+                <li><a href="#host">Anuncie seu imóvel</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+        </nav>
+        
+        <div class="auth-buttons">
+            <button class="btn btn-secondary" id="loginBtn">Entrar</button>
+            <button class="btn btn-primary" id="registerBtn">Cadastrar</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Encontre acomodações únicas para sua viagem</h1>
+            <p>Descubra casas, apartamentos e experiências perfeitas para qualquer momento</p>
+            <button class="btn btn-primary" id="heroSearchBtn">Comece a buscar</button>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-container" id="search">
+        <form class="search-form">
+            <div class="form-group">
+                <label for="location">Localização</label>
+                <input type="text" id="location" placeholder="Para onde você vai?">
+            </div>
+            
+            <div class="form-group">
+                <label for="checkin">Check-in</label>
+                <input type="date" id="checkin">
+            </div>
+            
+            <div class="form-group">
+                <label for="checkout">Check-out</label>
+                <input type="date" id="checkout">
+            </div>
+            
+            <div class="form-group">
+                <label for="guests">Hóspedes</label>
+                <select id="guests">
+                    <option value="1">1 hóspede</option>
+                    <option value="2" selected>2 hóspedes</option>
+                    <option value="3">3 hóspedes</option>
+                    <option value="4">4 hóspedes</option>
+                    <option value="5">5+ hóspedes</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary search-btn">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Como funciona</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Encontre</h3>
+                <p>Busque entre milhares de acomodações em todo o mundo com nosso sistema de busca avançado.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Reserve</h3>
+                <p>Escolha suas datas, reserve online e receba confirmação instantânea da sua reserva.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>Hospede-se</h3>
+                <p>Aproveite sua estadia em acomodações cuidadosamente selecionadas para sua experiência perfeita.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section class="properties">
+        <h2 class="section-title">Acomodações em destaque</h2>
+        
+        <div class="properties-grid">
+            <div class="property-card">
+                <div class="property-image" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                    <div class="property-price">R$ 250/noite</div>
+                </div>
+                <div class="property-info">
+                    <h3>Loft moderno no centro</h3>
+                    <div class="property-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>São Paulo, Brasil</span>
+                    </div>
+                    <div class="property-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>4.5 (128 avaliações)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="property-card">
+                <div class="property-image" style="background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                    <div class="property-price">R$ 350/noite</div>
+                </div>
+                <div class="property-info">
+                    <h3>Casa na praia</h3>
+                    <div class="property-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Florianópolis, Brasil</span>
+                    </div>
+                    <div class="property-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>5.0 (92 avaliações)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="property-card">
+                <div class="property-image" style="background-image: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                    <div class="property-price">R$ 420/noite</div>
+                </div>
+                <div class="property-info">
+                    <h3>Chalé nas montanhas</h3>
+                    <div class="property-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Gramado, Brasil</span>
+                    </div>
+                    <div class="property-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span>4.0 (65 avaliações)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Host Section -->
+    <section class="host-section" id="host">
+        <div class="host-content">
+            <h2>Anuncie seu espaço e ganhe dinheiro</h2>
+            <p>Seja um anfitrião e comece a ganhar renda extra alugando seu espaço. Milhões de viajantes estão procurando lugares únicos para se hospedar.</p>
+            <button class="btn btn-secondary" id="hostBtn">Saiba mais</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>MinimalStay</h3>
+                <p>Encontre acomodações únicas para sua viagem. Experiências memoráveis em todo o mundo.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Para Hóspedes</h3>
+                <ul>
+                    <li><a href="#">Como funciona</a></li>
+                    <li><a href="#">Perguntas frequentes</a></li>
+                    <li><a href="#">Áreas de cobertura</a></li>
+                    <li><a href="#">Segurança</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Para Anfitriões</h3>
+                <ul>
+                    <li><a href="#">Anuncie seu espaço</a></li>
+                    <li><a href="#">Recursos para anfitriões</a></li>
+                    <li><a href="#">Comunidade</a></li>
+                    <li><a href="#">Requisitos</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Suporte</h3>
+                <ul>
+                    <li><a href="#">Central de Ajuda</a></li>
+                    <li><a href="#">Contato</a></li>
+                    <li><a href="#">Termos de Uso</a></li>
+                    <li><a href="#">Política de Privacidade</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 MinimalStay. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            
+            <div class="modal-header">
+                <h2>Bem-vindo ao MinimalStay</h2>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="login">Entrar</div>
+                <div class="tab" data-tab="register">Cadastrar</div>
+                <div class="tab" data-tab="host">Anfitrião</div>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Login Form -->
+                <div class="tab-content active" id="loginTab">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="loginPassword">Senha</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Register Form -->
+                <div class="tab-content" id="registerTab">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="name">Nome completo</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar senha</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Criar conta</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Host Form -->
+                <div class="tab-content" id="hostTab">
+                    <form id="hostForm">
+                        <div class="form-group">
+                            <label for="hostName">Nome completo</label>
+                            <input type="text" id="hostName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hostEmail">Email</label>
+                            <input type="email" id="hostEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyType">Tipo de imóvel</label>
+                            <select id="propertyType" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="apartment">Apartamento</option>
+                                <option value="house">Casa</option>
+                                <option value="room">Quarto</option>
+                                <option value="unique">Espaço único</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="propertyLocation">Localização do imóvel</label>
+                            <input type="text" id="propertyLocation" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar cadastro</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Functionality
+        const authModal = document.getElementById('authModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const hostBtn = document.getElementById('hostBtn');
+        const heroSearchBtn = document.getElementById('heroSearchBtn');
+        const closeModal = document.getElementById('closeModal');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Open modal
+        function openModal() {
+            authModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeAuthModal() {
+            authModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Switch tabs
+        function switchTab(tabId) {
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach(content => {
+                if (content.id === tabId + 'Tab') {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => {
+            openModal();
+            switchTab('login');
+        });
+
+        registerBtn.addEventListener('click', () => {
+            openModal();
+            switchTab('register');
+        });
+
+        hostBtn.addEventListener('click', () => {
+            openModal();
+            switchTab('host');
+        });
+
+        heroSearchBtn.addEventListener('click', () => {
+            document.getElementById('search').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        });
+
+        closeModal.addEventListener('click', closeAuthModal);
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                closeAuthModal();
+            }
+        });
+
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchTab(tab.dataset.tab);
+            });
+        });
+
+        // Form submissions
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login realizado com sucesso!');
+            closeAuthModal();
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Cadastro realizado com sucesso!');
+            closeAuthModal();
+        });
+
+        document.getElementById('hostForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Cadastro de anfitrião enviado! Entraremos em contato em breve.');
+            closeAuthModal();
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Set min date for checkin and checkout
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkin').min = today;
+        document.getElementById('checkout').min = today;
+    </script>
+</body>
+</html>
